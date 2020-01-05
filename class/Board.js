@@ -1,6 +1,6 @@
 class Board {
 	constructor(size) {
-		const row = Array(size).fill(' '); // check git configuration
+		const row = Array(size).fill(' ');
 		this.field = Array(size).fill(row);
 	}
 
