@@ -9,6 +9,7 @@
 */
 
 const Menu = require('./class/Menu');
+const Gameplay = require('./class/Gameplay');
 
 class Game {
 	constructor() {
@@ -19,7 +20,8 @@ class Game {
 		this.menu
 			.show()
 			.then(mode => {
-				
+				const gameplay = new Gameplay(mode);
+				gameplay.init();
 			})
 			.catch(status => {
 				process.exit(status);

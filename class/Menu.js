@@ -27,6 +27,7 @@ class Menu {
 
 			const menu_controller = str => {
 				process.stdin.off('keypress', menu_controller);
+				this.clear();
 
 				switch (str) {
 					case '1':
