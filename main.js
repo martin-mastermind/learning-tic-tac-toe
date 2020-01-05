@@ -1,7 +1,7 @@
 /*
-    1. Main menu (select mode - PVP or PVE)
+    V1. Main menu (select mode - PVP or PVE)
     2. Game
-        2.1. Board
+        V2.1. Board
         2.2. Players
         2.3. Turn-based mechanic
         2.4. Checker for conditions
