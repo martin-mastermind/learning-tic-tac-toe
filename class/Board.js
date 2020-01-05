@@ -1,16 +1,27 @@
 class Board {
 	constructor(size) {
-		const row = Array(size).fill(' ');
-		this.field = Array(size).fill(row);
+		this.board = [];
+		for (let i = 0; i < size; i++) {
+			this.board.push(new Array(size).fill(' '));
+		}
 	}
 
 	render() {
 		process.stdout.write('\u001b[2J\u001b[0;0H');
 
-		this.field.forEach((element, index) => {
+		this.board.forEach((element, index) => {
 			console.log(element.join('|'));
-			index !== this.field.length - 1 && console.log('-----');
+			index !== this.board.length - 1 && console.log('-----');
 		});
+	}
+
+	setPoint({ x, y }, figure) {
+		if (typeof x === 'undefined' || typeof y === 'undefined') return false;
+
+		const is_empty = this.board[x][y] === ' ';
+		this.board[x][y] = is_empty ? figure : this.board[x][y];
+
+		return is_empty;
 	}
 }
 

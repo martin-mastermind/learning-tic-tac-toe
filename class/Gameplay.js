@@ -18,9 +18,20 @@ class Gameplay {
 		this.init();
 	}
 
+	checkPosition() {
+		setTimeout(() => {
+			if (!this.board.setPoint(this.players[this.turn].player_position, this.turn)) {
+				this.checkPosition();
+			} else {
+				this.board.render();
+			}
+		}, 60);
+	}
+
 	init() {
 		this.board.render();
 		this.players[this.turn].listen();
+		this.checkPosition();
 	}
 }
 
