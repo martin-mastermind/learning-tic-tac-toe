@@ -20,8 +20,7 @@ class Game {
 		this.menu
 			.show()
 			.then(mode => {
-				const gameplay = new Gameplay(mode);
-				gameplay.init();
+				new Gameplay(mode);
 			})
 			.catch(status => {
 				process.exit(status);
