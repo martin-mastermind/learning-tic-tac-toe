@@ -8,10 +8,6 @@ class Menu {
 		process.stdin.on('keypress', (str, key) => key.ctrl && key.name === 'c' && process.exit());
 	}
 
-	clear() {
-		process.stdout.write('\u001b[2J\u001b[0;0H');
-	}
-
 	print() {
 		console.log('***********');
 		console.log('1. Versus human');
@@ -21,13 +17,13 @@ class Menu {
 	}
 
 	async show() {
-		this.clear();
+		process.stdout.write('\u001b[2J\u001b[0;0H');
+
 		return new Promise((resolve, reject) => {
 			this.print();
 
 			const menu_controller = str => {
 				process.stdin.off('keypress', menu_controller);
-				this.clear();
 
 				switch (str) {
 					case '1':
