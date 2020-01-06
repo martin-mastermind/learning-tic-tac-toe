@@ -52,15 +52,15 @@ class Gameplay {
 		const winner = this.board.getWinner();
 		if (winner !== null) {
 			console.log(winner === 'tie' ? 'Game Tie' : `'${winner}' is won`);
+			return;
+		}
+		const current_player = this.players[this.turn];
+		if (current_player.isHuman) {
+			this.humanControlService();
 		} else {
-			const current_player = this.players[this.turn];
-			if (current_player.isHuman) {
-				this.humanControlService();
-			} else {
-				current_player.aiMove(this.board);
-				this.turn = this.turn === 'x' ? 'o' : 'x';
-				this.cycle();
-			}
+			current_player.aiMove(this.board);
+			this.turn = this.turn === 'x' ? 'o' : 'x';
+			this.cycle();
 		}
 	}
 }
