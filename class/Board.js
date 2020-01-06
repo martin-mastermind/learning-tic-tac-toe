@@ -55,6 +55,19 @@ class Board {
 		return result.length === 0 ? (this.full() ? 'tie' : null) : result[0];
 	}
 
+	getEmptyPoints() {
+		if (this.full()) return [];
+
+		return this.board
+			.map((row, r_index) => {
+				const result_obj = row
+					.map((col, c_index) => (col === ' ' ? c_index : undefined))
+					.filter(element => element !== undefined);
+				return result_obj ? { cols: result_obj, row: r_index } : undefined;
+			})
+			.filter(serie => serie.cols.length > 0);
+	}
+
 	full() {
 		return !this.board.some(row => row.includes(' '));
 	}

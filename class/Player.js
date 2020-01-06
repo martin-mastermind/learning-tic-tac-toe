@@ -39,39 +39,49 @@ class Player {
 		}
 
 		let bestScore = isMaximizing ? -Infinity : Infinity;
-		const field = this.board_controller.board;
-		for (let i = 0; i < 3; i++) {
-			for (let j = 0; j < 3; j++) {
-				if (field[i][j] === ' ') {
-					field[i][j] = isMaximizing ? this.figure : this.figure === 'x' ? 'o' : 'x';
-					const score = this.minimax(!isMaximizing);
-					field[i][j] = ' ';
-					bestScore = isMaximizing ? Math.max(score, bestScore) : Math.min(score, bestScore);
-				}
+
+		const availables = this.board_controller.getEmptyPoints();
+		const figure = isMaximizing ? this.figure : this.figure === 'x' ? 'o' : 'x';
+
+		for (let serie of availables) {
+			for (let column of serie.cols) {
+				bestScore = this.checkStep({
+					row: serie.row,
+					column,
+					best: bestScore,
+					figure,
+					mode: isMaximizing
+				});
 			}
 		}
 		return bestScore;
 	}
 
-	checkStep({ row, column, best }) {
+	checkStep({ row, column, best, figure, mode }) {
 		const field = this.board_controller.board;
-		if (field[row][column] === ' ') {
-			field[row][column] = this.figure;
-			const score = this.minimax(false);
-			field[row][column] = ' ';
-			if (score > best) {
-				return { score, row, column };
-			}
+		field[row][column] = figure;
+		const score = this.minimax(mode !== 'ai' ? !mode : false);
+		field[row][column] = ' ';
+		if (mode === 'ai') {
+			return score > best ? { score, row, column } : undefined;
 		}
+
+		return mode ? Math.max(score, best) : Math.min(score, best);
 	}
 
 	aiMove() {
 		let bestScore = -Infinity;
 		let move;
-		const field = this.board_controller.board;
-		for (let row in field) {
-			for (let column in field[row]) {
-				const result = this.checkStep({ row, column, best: bestScore });
+		const availables = this.board_controller.getEmptyPoints();
+		for (let serie of availables) {
+			for (let column of serie.cols) {
+				const result = this.checkStep({
+					row: serie.row,
+					column,
+					best: bestScore,
+					figure: this.figure,
+					mode: 'ai'
+				});
 
 				if (result) {
 					bestScore = result.score;
