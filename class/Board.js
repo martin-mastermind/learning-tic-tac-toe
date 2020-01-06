@@ -29,29 +29,30 @@ class Board {
 		return formatted === 'xxx' || formatted === 'ooo';
 	}
 
-	getWinner() {
-		let result = [];
-		const diag_array = [
+	iterateAround = (iterable, result) => {
+		iterable.forEach(row => {
+			result = this.lineCheck(row) && result.length === 0 ? row : result;
+		});
+	};
+
+	getDiagonals() {
+		return [
 			[this.board[0][0], this.board[1][1], this.board[2][2]],
 			[this.board[0][2], this.board[1][1], this.board[2][0]]
 		];
-		const iterateAround = iterable => {
-			for (let row of iterable) {
-				if (this.lineCheck(row)) {
-					result = row;
-					break;
-				}
-			}
-		};
-		iterateAround(this.board);
-		iterateAround(diag_array);
-		for (let i = 0; i < this.board.length; i++) {
-			const row = this.board.map(element => element[i]);
-			if (this.lineCheck(row)) {
-				result = row;
-				break;
-			}
-		}
+	}
+
+	getVerticals() {
+		return this.board.map((_, index) => this.board.map(column => column[index]));
+	}
+
+	getWinner() {
+		let result = [];
+
+		this.iterateAround(this.board, result);
+		this.iterateAround(this.getDiagonals(), result);
+		this.iterateAround(this.getVerticals(), result);
+
 		return result.length === 0 ? (this.full() ? 'tie' : null) : result[0];
 	}
 
