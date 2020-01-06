@@ -8,14 +8,25 @@ class Gameplay {
 		this.players = {};
 
 		if (mode === 'human') {
+			this.humanModeInitialization();
 		} else {
-			const is_human_first = !!Math.round(Math.random());
-			this.players.x = new Player(is_human_first, 'x', this.board);
-			this.players.o = new Player(!is_human_first, 'o', this.board);
-			this.turn = is_human_first ? 'x' : 'o';
+			this.aiModeInitialization();
 		}
 
 		this.cycle();
+	}
+
+	humanModeInitialization() {
+		this.players.x = new Player(true, 'x', this.board);
+		this.players.o = new Player(true, 'o', this.board);
+		this.turn = !!Math.round(Math.random()) ? 'x' : 'o';
+	}
+
+	aiModeInitialization() {
+		const is_human_first = !!Math.round(Math.random());
+		this.players.x = new Player(is_human_first, 'x', this.board);
+		this.players.o = new Player(!is_human_first, 'o', this.board);
+		this.turn = is_human_first ? 'x' : 'o';
 	}
 
 	humanControlService() {
