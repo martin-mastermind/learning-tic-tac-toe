@@ -39,12 +39,13 @@ class Player {
 		}
 
 		let bestScore = isMaximizing ? -Infinity : Infinity;
+		const field = this.board_controller.board;
 		for (let i = 0; i < 3; i++) {
 			for (let j = 0; j < 3; j++) {
-				if (board.board[i][j] === ' ') {
-					board.board[i][j] = isMaximizing ? this.figure : this.figure === 'x' ? 'o' : 'x';
+				if (field[i][j] === ' ') {
+					field[i][j] = isMaximizing ? this.figure : this.figure === 'x' ? 'o' : 'x';
 					const score = this.minimax(!isMaximizing);
-					board.board[i][j] = ' ';
+					field[i][j] = ' ';
 					bestScore = isMaximizing ? Math.max(score, bestScore) : Math.min(score, bestScore);
 				}
 			}
@@ -52,30 +53,25 @@ class Player {
 		return bestScore;
 	}
 
-	checkStep({ Board, row, column, best }) {
-		const field = Board.board;
-		if (field[i][j] === ' ') {
-			field[i][j] = this.figure;
-			const score = this.minimax(Board, 0, false);
-			field[i][j] = ' ';
+	checkStep({ row, column, best }) {
+		const field = this.board_controller.board;
+		if (field[row][column] === ' ') {
+			field[row][column] = this.figure;
+			const score = this.minimax(false);
+			field[row][column] = ' ';
 			if (score > best) {
 				return { score, row, column };
 			}
 		}
 	}
 
-	aiMove(Board) {
+	aiMove() {
 		let bestScore = -Infinity;
 		let move;
-		const field = Board.board;
+		const field = this.board_controller.board;
 		for (let row in field) {
 			for (let column in field[row]) {
-				const result = this.checkStep({
-					Board,
-					row,
-					column,
-					bestScore
-				});
+				const result = this.checkStep({ row, column, best: bestScore });
 
 				if (result) {
 					bestScore = result.score;
@@ -84,7 +80,7 @@ class Player {
 			}
 		}
 		if (move) {
-			Board.board[move.x][move.y] = this.figure;
+			this.board_controller.board[move.x][move.y] = this.figure;
 		}
 	}
 }

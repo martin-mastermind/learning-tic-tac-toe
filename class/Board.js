@@ -52,10 +52,6 @@ class Board {
 				break;
 			}
 		}
-		console.log({
-			map: this.board,
-			result: result.length === 0 ? (this.full() ? 'tie' : null) : result[0]
-		});
 		return result.length === 0 ? (this.full() ? 'tie' : null) : result[0];
 	}
 

@@ -31,14 +31,19 @@ class Gameplay {
 
 	cycle() {
 		this.board.render();
-		const current_player = this.players[this.turn];
-		if (current_player.isHuman) {
-			current_player.listen();
-			this.checkPosition();
+		const winner = this.board.getWinner();
+		if (winner !== null) {
+			console.log(winner === 'tie' ? 'Game Tie' : `'${winner}' is won`);
 		} else {
-			current_player.aiMove(this.board);
-			this.turn = this.turn === 'x' ? 'o' : 'x';
-			this.cycle();
+			const current_player = this.players[this.turn];
+			if (current_player.isHuman) {
+				current_player.listen();
+				this.checkPosition();
+			} else {
+				current_player.aiMove(this.board);
+				this.turn = this.turn === 'x' ? 'o' : 'x';
+				this.cycle();
+			}
 		}
 	}
 }
