@@ -32,8 +32,8 @@ class Player {
 		process.stdin.on('keypress', move_listener);
 	}
 
-	minimax(isMaximizing) {
-		const result = this.board_controller.getWinner();
+	async minimax(isMaximizing) {
+		const result = await this.board_controller.getWinner();
 		if (result !== null) {
 			return this.scores[result];
 		}
@@ -45,7 +45,7 @@ class Player {
 
 		for (let serie of availables) {
 			for (let column of serie.cols) {
-				bestScore = this.checkStep({
+				bestScore = await this.checkStep({
 					row: serie.row,
 					column,
 					best: bestScore,
@@ -57,10 +57,10 @@ class Player {
 		return bestScore;
 	}
 
-	checkStep({ row, column, best, figure, mode }) {
+	async checkStep({ row, column, best, figure, mode }) {
 		const field = this.board_controller.board;
 		field[row][column] = figure;
-		const score = this.minimax(mode !== 'ai' ? !mode : false);
+		const score = await this.minimax(mode !== 'ai' ? !mode : false);
 		field[row][column] = ' ';
 		if (mode === 'ai') {
 			return score > best ? { score, row, column } : undefined;
@@ -69,13 +69,13 @@ class Player {
 		return mode ? Math.max(score, best) : Math.min(score, best);
 	}
 
-	aiMove() {
+	async aiMove() {
 		let bestScore = -Infinity;
 		let move;
 		const availables = this.board_controller.getEmptyPoints();
 		for (let serie of availables) {
 			for (let column of serie.cols) {
-				const result = this.checkStep({
+				const result = await this.checkStep({
 					row: serie.row,
 					column,
 					best: bestScore,

@@ -47,9 +47,9 @@ class Gameplay {
 		}, 60);
 	}
 
-	cycle() {
+	async cycle() {
 		this.board.render();
-		const winner = this.board.getWinner();
+		const winner = await this.board.getWinner();
 		if (winner !== null) {
 			console.log(winner === 'tie' ? 'Game Tie' : `'${winner}' is won`);
 			return;
@@ -58,7 +58,7 @@ class Gameplay {
 		if (current_player.isHuman) {
 			this.humanControlService();
 		} else {
-			current_player.aiMove(this.board);
+			await current_player.aiMove(this.board);
 			this.turn = this.turn === 'x' ? 'o' : 'x';
 			this.cycle();
 		}

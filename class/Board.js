@@ -29,11 +29,15 @@ class Board {
 		return formatted === 'xxx' || formatted === 'ooo';
 	}
 
-	iterateAround = (iterable, result) => {
-		iterable.forEach(row => {
-			result = this.lineCheck(row) && result.length === 0 ? row : result;
+	async iterateAround(iterable) {
+		return new Promise(resolve => {
+			iterable.forEach(row => {
+				this.lineCheck(row) && resolve(row);
+			});
+
+			resolve([]);
 		});
-	};
+	}
 
 	getDiagonals() {
 		return [
@@ -46,14 +50,16 @@ class Board {
 		return this.board.map((_, index) => this.board.map(column => column[index]));
 	}
 
-	getWinner() {
-		let result = [];
+	async getWinner() {
+		const result = (
+			await Promise.all([
+				this.iterateAround(this.board),
+				this.iterateAround(this.getDiagonals()),
+				this.iterateAround(this.getVerticals())
+			]).then(response => response.filter(serie => serie.length > 0))
+		)[0];
 
-		this.iterateAround(this.board, result);
-		this.iterateAround(this.getDiagonals(), result);
-		this.iterateAround(this.getVerticals(), result);
-
-		return result.length === 0 ? (this.full() ? 'tie' : null) : result[0];
+		return !result ? (this.full() ? 'tie' : null) : result[0];
 	}
 
 	getEmptyPoints() {
