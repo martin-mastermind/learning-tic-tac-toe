@@ -13,7 +13,7 @@ class Player {
 			[this.figure === 'x' ? 'o' : 'x']: -1
 		};
 		this.board_controller = board;
-		this.player_position = {
+		this.position = {
 			x: undefined,
 			y: undefined
 		};
@@ -24,8 +24,8 @@ class Player {
 			const int_representation = +key.name;
 			if (!Number.isNaN(int_representation) && int_representation >= 0 && int_representation < 10) {
 				const formatted_int = int_representation - 1;
-				this.player_position.x = Math.trunc(formatted_int / 3);
-				this.player_position.y = formatted_int % 3;
+				this.position.x = Math.trunc(formatted_int / 3);
+				this.position.y = formatted_int % 3;
 				process.stdin.off('keypress', move_listener);
 			}
 		};

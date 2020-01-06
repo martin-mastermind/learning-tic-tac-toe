@@ -18,11 +18,29 @@ class Gameplay {
 		this.cycle();
 	}
 
+	humanControlService() {
+		this.players[this.turn].listen();
+		this.checkPosition();
+	}
+
+	resetPosition(player) {
+		player.position = {
+			x: undefined,
+			y: undefined
+		};
+	}
+
 	checkPosition() {
 		setTimeout(() => {
-			if (!this.board.setPoint(this.players[this.turn].player_position, this.turn)) {
+			const current_player = this.players[this.turn];
+			const success_placement = this.board.setPoint(current_player.position, this.turn);
+			if (success_placement === undefined) {
 				this.checkPosition();
+			} else if (!success_placement) {
+				this.resetPosition(current_player);
+				this.humanControlService();
 			} else {
+				this.resetPosition(current_player);
 				this.turn = this.turn === 'x' ? 'o' : 'x';
 				this.cycle();
 			}
@@ -37,8 +55,7 @@ class Gameplay {
 		} else {
 			const current_player = this.players[this.turn];
 			if (current_player.isHuman) {
-				current_player.listen();
-				this.checkPosition();
+				this.humanControlService();
 			} else {
 				current_player.aiMove(this.board);
 				this.turn = this.turn === 'x' ? 'o' : 'x';

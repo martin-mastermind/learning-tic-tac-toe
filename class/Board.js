@@ -16,7 +16,7 @@ class Board {
 	}
 
 	setPoint({ x, y }, figure) {
-		if (typeof x === 'undefined' || typeof y === 'undefined') return false;
+		if (typeof x === 'undefined' || typeof y === 'undefined') return undefined;
 
 		const is_empty = this.board[x][y] === ' ';
 		this.board[x][y] = is_empty ? figure : this.board[x][y];
