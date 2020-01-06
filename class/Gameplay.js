@@ -63,7 +63,7 @@ class Gameplay {
 		const winner = await this.board.getWinner();
 		if (winner !== null) {
 			console.log(winner === 'tie' ? 'Game Tie' : `'${winner}' is won`);
-			return;
+			process.exit(0);
 		}
 		const current_player = this.players[this.turn];
 		if (current_player.isHuman) {
