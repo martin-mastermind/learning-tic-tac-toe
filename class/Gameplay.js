@@ -10,8 +10,8 @@ class Gameplay {
 		if (mode === 'human') {
 		} else {
 			const is_human_first = !!Math.round(Math.random());
-			this.players.x = new Player(is_human_first, 'x');
-			this.players.o = new Player(!is_human_first, 'o');
+			this.players.x = new Player(is_human_first, 'x', this.board);
+			this.players.o = new Player(!is_human_first, 'o', this.board);
 			this.turn = is_human_first ? 'x' : 'o';
 		}
 
