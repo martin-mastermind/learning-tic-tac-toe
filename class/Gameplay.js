@@ -15,7 +15,7 @@ class Gameplay {
 			this.turn = is_human_first ? 'x' : 'o';
 		}
 
-		this.init();
+		this.cycle();
 	}
 
 	checkPosition() {
@@ -23,15 +23,23 @@ class Gameplay {
 			if (!this.board.setPoint(this.players[this.turn].player_position, this.turn)) {
 				this.checkPosition();
 			} else {
-				this.board.render();
+				this.turn = this.turn === 'x' ? 'o' : 'x';
+				this.cycle();
 			}
 		}, 60);
 	}
 
-	init() {
+	cycle() {
 		this.board.render();
-		this.players[this.turn].listen();
-		this.checkPosition();
+		const current_player = this.players[this.turn];
+		if (current_player.isHuman) {
+			current_player.listen();
+			this.checkPosition();
+		} else {
+			current_player.aiMove(this.board);
+			this.turn = this.turn === 'x' ? 'o' : 'x';
+			this.cycle();
+		}
 	}
 }
 
